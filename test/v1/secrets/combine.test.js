@@ -3,7 +3,7 @@ const supertest = require('supertest')
 
 const { app } = require('../../test-helper')
 
-describe('POST /v1/secrets/share', (context) => {
+describe('POST /v1/secrets/combine', (context) => {
   let server, request
   let params
 
@@ -12,9 +12,7 @@ describe('POST /v1/secrets/share', (context) => {
     request = supertest.agent(server)
 
     params = {
-      secret: 'thisismysecret',
-      quorum: 3,
-      shards: 5
+      shares: ['a','b','c']
     }
   })
 
@@ -23,14 +21,13 @@ describe('POST /v1/secrets/share', (context) => {
   })
 
   context('valid parameters', (assert, done) => {
-    request.post('/v1/secrets/share')
+    request.post('/v1/secrets/combine')
       .send(params)
       .expect(201)
       .expect('Content-Type', /json/)
       .end((err, response) => {
-        assert.ok(response.body)
-        assert.ok(Array.isArray(response.body.shards))
-        assert.equal(response.body.shards.length, 5)
+        assert.notOk(err, 'No error is raised')
+        assert.ok(response, 'Returns a valid response')
         done()
       })
   })
