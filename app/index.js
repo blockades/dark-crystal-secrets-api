@@ -5,11 +5,13 @@ const Controllers = require('./controllers/')
 const Routes = require('../config/routes')
 
 const app = express()
+const router = express.Router()
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
-const controllers = Controllers()
-const routes = Routes(app, controllers)
+const routes = Routes(router, Controllers())
+
+app.use('/', router)
 
 exports = module.exports = app
