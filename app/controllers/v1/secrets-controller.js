@@ -11,6 +11,7 @@ exports.combine = (req, res, next) => {
 
 exports.validate = (method) => {
   return {
-    'share': []
+    'share': [],
+    'combine': []
   }[method]
 }
