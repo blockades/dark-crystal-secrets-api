@@ -1,0 +1,39 @@
+{
+  "name": "dark-crystal-secrets-api",
+  "version": "1.0.0",
+  "description": "HTTP API for Dark Crystal's Shamir's Secret Shares wrapper",
+  "main": "app/index.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "tape test/**/*.test.js | tap-spec"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/blockades/dark-crystal-secrets-api.git"
+  },
+  "keywords": [
+    "dark-crystal",
+    "mmt",
+    "blockades",
+    "shamirs",
+    "secrets",
+    "shares",
+    "secret"
+  ],
+  "author": "kyphae",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/blockades/dark-crystal-secrets-api/issues"
+  },
+  "homepage": "https://github.com/blockades/dark-crystal-secrets-api#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4"
+  },
+  "devDependencies": {
+    "supertest": "^3.4.1",
+    "tap-spec": "^5.0.0",
+    "tape": "^4.9.2",
+    "tape-plus": "^1.0.0"
+  }
+}
