@@ -12,7 +12,10 @@ describe('POST /v1/secrets/share', (context) => {
     request = supertest.agent(server)
 
     params = {
-      secret: 'thisismysecret'
+      secret: 'thisismysecret',
+      version: '1.0.0',
+      quorum: 3,
+      shards: 5
     }
   })
 
@@ -26,8 +29,9 @@ describe('POST /v1/secrets/share', (context) => {
       .expect(201)
       .expect('Content-Type', /json/)
       .end((err, response) => {
-        assert.notOk(err, 'No error is raised')
-        assert.ok(response, 'Returns a valid response')
+        assert.ok(response.body)
+        assert.ok(Array.isArray(response.body.shards))
+        assert.equal(response.body.shards.length, 5)
         done()
       })
   })
