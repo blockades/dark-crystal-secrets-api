@@ -98,7 +98,7 @@ describe('POST /v1/secrets/share', (context) => {
         }, {
           location: 'body',
           param: 'shards',
-          value: 5,
+          value: params.shards,
           msg: 'shards must be greater than or equal to provided quorum'
         }])
 
@@ -140,15 +140,17 @@ describe('POST /v1/secrets/share', (context) => {
         assert.deepEqual(response.body.errors, [{
           location: 'body',
           param: 'quorum',
-          value: 'one',
+          value: params.quorum,
           msg: '\'quorum\' must be an integer'
-        }, { location: 'body',
+        }, {
+          location: 'body',
           param: 'quorum',
-          value: 'one',
+          value: params.quorum,
           msg: '\'quorum\' must be greater than 1'
-        }, { location: 'body',
+        }, {
+          location: 'body',
           param: 'shards',
-          value: 5,
+          value: params.shards,
           msg: 'shards must be greater than or equal to provided quorum'
         }])
 
@@ -193,7 +195,7 @@ describe('POST /v1/secrets/share', (context) => {
         assert.deepEqual(response.body.errors, [{
           location: 'body',
           param: 'shards',
-          value: 2,
+          value: params.shards,
           msg: 'shards must be greater than or equal to provided quorum'
         }])
 
@@ -214,12 +216,12 @@ describe('POST /v1/secrets/share', (context) => {
         assert.deepEqual(response.body.errors, [{
           location: 'body',
           param: 'shards',
-          value: 'two',
+          value: params.shards,
           msg: '\'shards\' must be an integer'
         }, {
           location: 'body',
           param: 'shards',
-          value: 'two',
+          value: params.shards,
           msg: 'shards must be greater than or equal to provided quorum'
         }])
 

@@ -18,7 +18,7 @@ describe('POST /v1/shards/verify', (context) => {
     server.close()
   })
 
-  context('valid parameters', (assert, done) => {
+  context('valid with correct parameters', (assert, done) => {
     request.post('/v1/shards/verify')
       .send(params)
       .expect(200)
@@ -28,6 +28,53 @@ describe('POST /v1/shards/verify', (context) => {
         assert.ok(response.body)
         assert.equal(typeof response.body.shard, 'string')
         assert.equal(response.body.shard, params.shard)
+        done()
+      })
+  })
+
+  context('invalid when shard is not a string', (assert, done) => {
+    params.shard = 1
+
+    request.post('/v1/shards/verify')
+      .send(params)
+      .expect(422)
+      .expect('Content-Type', /json/)
+      .end((err, response) => {
+        assert.notOk(err, 'No error is raised')
+        assert.ok(response.body)
+        assert.deepEqual(response.body.errors, [{
+          location: 'body',
+          param: 'shard',
+          value: params.shard,
+          msg: '\'shard\' must be a string'
+        }, { location: 'body',
+          param: 'shard',
+          value: params.shard,
+          msg: 'invalid shard format'
+        }])
+
+        done()
+      })
+  })
+
+  context('invalid when shard is not a valid shard', (assert, done) => {
+    let v2shard = '801nrb0BnehCLCug/89VQZqwhJcSNX2gWi20i6PEDV96VxD0ocjgxIjP+/hlnMzNKi8/vASlY5UYKfWqyzvfDcO4g=='
+    params.shard = v2shard
+
+    request.post('/v1/shards/verify')
+      .send(params)
+      .expect(422)
+      .expect('Content-Type', /json/)
+      .end((err, response) => {
+        assert.notOk(err, 'No error is raised')
+        assert.ok(response.body)
+        assert.deepEqual(response.body.errors, [{
+          location: 'body',
+          param: 'shard',
+          value: params.shard,
+          msg: 'invalid shard format'
+        }])
+
         done()
       })
   })
