@@ -31,7 +31,9 @@ describe('POST /v1/secrets/combine', (context) => {
       .expect('Content-Type', /json/)
       .end((err, response) => {
         assert.notOk(err, 'No error is raised')
-        assert.ok(response, 'Returns a valid response')
+        assert.ok(response.body)
+        assert.equal(typeof response.body.secret, 'string')
+        assert.equal(response.body.secret, 'secret')
         done()
       })
   })

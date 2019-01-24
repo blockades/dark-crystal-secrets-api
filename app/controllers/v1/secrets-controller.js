@@ -47,7 +47,7 @@ exports.combine = (req, res, next) => {
 
 exports.validate = (method) => {
   const share = [
-    body('secret', "secret doesn't exist").exists(),
+    body('secret', "secret doesn't exist").exists().isString(),
     body('quorum', "quorum doesn't exist").exists().matches(/^[0-9]+$/),
     body('shards', "shards doesn't exist").exists().matches(/^[0-9]+$/).custom(greaterThanOrEqualToQuorum),
   ]

@@ -28,6 +28,7 @@ describe('POST /v1/secrets/share', (context) => {
       .expect(201)
       .expect('Content-Type', /json/)
       .end((err, response) => {
+        assert.notOk(err, 'No error is raised')
         assert.ok(response.body)
         assert.ok(Array.isArray(response.body.shards))
         assert.equal(response.body.shards.length, 5)

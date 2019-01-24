@@ -1,10 +1,34 @@
-const { verify } = require('dark-crystal-secrets')
+// v1/shards-controller
+
+const { body, validationResult } = require('express-validator/check')
+const secrets = require('dark-crystal-secrets/v1')
 
 exports.verify = (req, res) => {
+  const errors = validationResult(req)
+
+  if (!errors.isEmpty()) {
+    return res
+      .status(422)
+      .json({ errors: errors.array() })
+
+  } else {
+    const params = req.body
+
+    return res
+      .status(200)
+      .json({ shard: params.shard })
+  }
 }
 
 exports.validate = (method) => {
   return {
-    'verify': []
+    'verify': [
+      body('shard', "shard doesn't exist").exists().isString(),
+      body('shard', "invalid shard format").custom(isValidShard)
+    ]
   }[method]
+
+  function isValidShard (value, action) {
+    return secrets.validateShard(value)
+  }
 }
