@@ -47,20 +47,26 @@ exports.combine = (req, res, next) => {
 
 exports.validate = (method) => {
   const share = [
-    body('secret', "secret doesn't exist").exists().isString(),
-    body('quorum', "quorum doesn't exist").exists().matches(/^[0-9]+$/),
-    body('shards', "shards doesn't exist").exists().matches(/^[0-9]+$/).custom(greaterThanOrEqualToQuorum),
+    body('secret').isString().withMessage("'secret' must be a string"),
+    body('quorum').matches(/^[0-9]+$/).withMessage("'quorum' must be an integer"),
+    body('quorum').custom(quorumLessThanOne).withMessage("'quorum' must be greater than 1"),
+    body('shards').matches(/^[0-9]+$/).withMessage("'shards' must be an integer"),
+    body('shards').custom(greaterThanOrEqualToQuorum).withMessage("shards must be greater than or equal to provided quorum"),
   ]
 
   const combine = [
-    body('shards', "shards doesn't exist").exists().isArray(),
-    body('shards', "shards are not valid").custom(validShards)
+    body('shards').isArray().withMessage("'shards' must be an array"),
+    body('shards').custom(validShards).withMessage("one or more of the provided shards are not valid")
   ]
 
   return { share, combine }[method]
 
   function greaterThanOrEqualToQuorum (value, action) {
     return parseInt(value) >= parseInt(action.req.body.quorum)
+  }
+
+  function quorumLessThanOne (value, action) {
+    return value > 1
   }
 
   function validShards (array, action) {

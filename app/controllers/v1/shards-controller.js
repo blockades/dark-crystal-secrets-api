@@ -23,8 +23,8 @@ exports.verify = (req, res) => {
 exports.validate = (method) => {
   return {
     'verify': [
-      body('shard', "shard doesn't exist").exists().isString(),
-      body('shard', "invalid shard format").custom(isValidShard)
+      body('shard').isString().withMessage("'shard' must be a string"),
+      body('shard').custom(isValidShard).withMessage("invalid shard format")
     ]
   }[method]
 
