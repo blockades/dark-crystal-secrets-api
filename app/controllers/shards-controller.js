@@ -1,4 +1,4 @@
-// v1/shards-controller
+// /shards-controller
 
 const { body, validationResult } = require('express-validator/check')
 const secrets = require('dark-crystal-secrets/v1')

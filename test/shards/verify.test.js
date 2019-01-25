@@ -1,9 +1,9 @@
 const { describe } = require('tape-plus')
 const supertest = require('supertest')
 
-const { app } = require('../../test-helper')
+const { app } = require('../test-helper')
 
-describe('POST /v1/shards/verify', (context) => {
+describe('POST /shards/verify', (context) => {
   let server, request
   let params
 
@@ -19,7 +19,7 @@ describe('POST /v1/shards/verify', (context) => {
   })
 
   context('valid with correct parameters', (assert, done) => {
-    request.post('/v1/shards/verify')
+    request.post('/shards/verify')
       .send(params)
       .expect(200)
       .expect('Content-Type', /json/)
@@ -35,7 +35,7 @@ describe('POST /v1/shards/verify', (context) => {
   context('invalid when shard is not a string', (assert, done) => {
     params.shard = 1
 
-    request.post('/v1/shards/verify')
+    request.post('/shards/verify')
       .send(params)
       .expect(422)
       .expect('Content-Type', /json/)
@@ -61,7 +61,7 @@ describe('POST /v1/shards/verify', (context) => {
     let v2shard = '801nrb0BnehCLCug/89VQZqwhJcSNX2gWi20i6PEDV96VxD0ocjgxIjP+/hlnMzNKi8/vASlY5UYKfWqyzvfDcO4g=='
     params.shard = v2shard
 
-    request.post('/v1/shards/verify')
+    request.post('/shards/verify')
       .send(params)
       .expect(422)
       .expect('Content-Type', /json/)

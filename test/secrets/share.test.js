@@ -1,9 +1,9 @@
 const { describe } = require('tape-plus')
 const supertest = require('supertest')
 
-const { app } = require('../../test-helper')
+const { app } = require('../test-helper')
 
-describe('POST /v1/secrets/share', (context) => {
+describe('POST /secrets/share', (context) => {
   let server, request
   let params
 
@@ -23,7 +23,7 @@ describe('POST /v1/secrets/share', (context) => {
   })
 
   context('valid with correct parameters', (assert, done) => {
-    request.post('/v1/secrets/share')
+    request.post('/secrets/share')
       .send(params)
       .expect(201)
       .expect('Content-Type', /json/)
@@ -39,7 +39,7 @@ describe('POST /v1/secrets/share', (context) => {
   context('invalid when secret is undefined', (assert, done) => {
     delete params.secret
 
-    request.post('/v1/secrets/share')
+    request.post('/secrets/share')
       .send(params)
       .expect(422)
       .expect('Content-Type', /json/)
@@ -59,7 +59,7 @@ describe('POST /v1/secrets/share', (context) => {
   context('invalid when secret is not a string', (assert, done) => {
     params.secret = 1
 
-    request.post('/v1/secrets/share')
+    request.post('/secrets/share')
       .send(params)
       .expect(422)
       .expect('Content-Type', /json/)
@@ -80,7 +80,7 @@ describe('POST /v1/secrets/share', (context) => {
   context('invalid when quorum is undefined', (assert, done) => {
     delete params.quorum
 
-    request.post('/v1/secrets/share')
+    request.post('/secrets/share')
       .send(params)
       .expect(422)
       .expect('Content-Type', /json/)
@@ -109,7 +109,7 @@ describe('POST /v1/secrets/share', (context) => {
   context('invalid when quorum is less than or equal to one', (assert, done) => {
     params.quorum = 1
 
-    request.post('/v1/secrets/share')
+    request.post('/secrets/share')
       .send(params)
       .expect(422)
       .expect('Content-Type', /json/)
@@ -130,7 +130,7 @@ describe('POST /v1/secrets/share', (context) => {
   context('invalid when quorum is a non-numerical string', (assert, done) => {
     params.quorum = 'one'
 
-    request.post('/v1/secrets/share')
+    request.post('/secrets/share')
       .send(params)
       .expect(422)
       .expect('Content-Type', /json/)
@@ -161,7 +161,7 @@ describe('POST /v1/secrets/share', (context) => {
   context('invalid when shards is undefined', (assert, done) => {
     delete params.shards
 
-    request.post('/v1/secrets/share')
+    request.post('/secrets/share')
       .send(params)
       .expect(422)
       .expect('Content-Type', /json/)
@@ -185,7 +185,7 @@ describe('POST /v1/secrets/share', (context) => {
   context('invalid when shards is less than quorum', (assert, done) => {
     params.shards = 2
 
-    request.post('/v1/secrets/share')
+    request.post('/secrets/share')
       .send(params)
       .expect(422)
       .expect('Content-Type', /json/)
@@ -206,7 +206,7 @@ describe('POST /v1/secrets/share', (context) => {
   context('invalid when shards is a non-numerical string', (assert, done) => {
     params.shards = 'two'
 
-    request.post('/v1/secrets/share')
+    request.post('/secrets/share')
       .send(params)
       .expect(422)
       .expect('Content-Type', /json/)

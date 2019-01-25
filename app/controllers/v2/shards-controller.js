@@ -1,2 +1,0 @@
-exports.verify = (req, res) => {
-}
