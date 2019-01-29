@@ -1,11 +1,11 @@
 version: '3'
 
 services:
-  app:
+  dark-crystal:
     build: .
     volumes:
       - .:/usr/app
       - /usr/app/node_modules
     command: npm start
     ports:
-      - "8990:80"
+      - "8990:8990"
