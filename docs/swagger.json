@@ -8,7 +8,7 @@
       "email": "frontdesk@blockades.org"
     }
   },
-  "host": "api.darkcrystal.pw",
+  "host": "localhost:8990",
   "basePath": "/",
   "tags": [
     {

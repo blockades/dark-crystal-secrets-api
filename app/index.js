@@ -14,7 +14,7 @@ app.use(bodyParser.json())
 
 const routes = Routes(router, Controllers())
 
-app.use('/', router)
-app.use('/', swaggerUI.serve, swaggerUI.setup(swaggerDocument))
+app.use("/", router)
+app.use("/", swaggerUI.serve, swaggerUI.setup(swaggerDocument))
 
 exports = module.exports = app
