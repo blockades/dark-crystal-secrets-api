@@ -1,4 +1,4 @@
-// /secrets-controller
+// secrets-controller
 
 const { body, oneOf, validationResult } = require('express-validator/check')
 const darkCrystal = require('dark-crystal-secrets')
@@ -60,7 +60,7 @@ exports.verify = (req, res, next) => {
 
     return res
       .status(201)
-      .json({ secret })
+      .json({ valid: Boolean(secret) })
   }
 }
 
@@ -70,7 +70,7 @@ exports.validate = (method) => {
     body('quorum').isInt().withMessage("'quorum' must be an integer"),
     body('quorum').custom(quorumLessThanOne).withMessage("'quorum' must be greater than 1"),
     body('shards').isInt().withMessage("'shards' must be an integer"),
-    body('shards').custom(greaterThanOrEqualToQuorum).withMessage("shards must be greater than or equal to provided quorum"),
+    body('shards').custom(greaterThanOrEqualToQuorum).withMessage("'shards' must be greater than or equal to provided 'quorum'"),
   ]
 
   const combine = [
@@ -81,7 +81,10 @@ exports.validate = (method) => {
   ]
 
   const verify = [
-
+    body('version').matches(/^[0-9]+\.[0-9]+\.[0-9]+$/).withMessage("'version' must be semantic version"),
+    body('version').isIn(['1.0.0', '2.0.0']).withMessage("'version' not currently supported"),
+    body('shards').isArray().withMessage("'shards' must be an array"),
+    body('shards').custom(validShards).withMessage("one or more of the provided shards are not valid")
   ]
 
   return { share, combine, verify }[method]
