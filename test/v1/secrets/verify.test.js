@@ -1,9 +1,9 @@
 const { describe } = require('tape-plus')
 const supertest = require('supertest')
 
-const { app } = require('../test-helper')
+const { app } = require('../../test-helper')
 
-describe('POST /secrets/combine', (context) => {
+describe('POST /v1/secrets/verify', (context) => {
   let server, request
   let params
 
@@ -28,7 +28,7 @@ describe('POST /secrets/combine', (context) => {
   context('invalid when version is not a semantic version', (assert, done) => {
     params.version = 'this is not a version'
 
-    request.post('/secrets/combine')
+    request.post('/v1/secrets/verify')
       .send(params)
       .expect(422)
       .expect('Content-Type', /json/)
@@ -60,7 +60,7 @@ describe('POST /secrets/combine', (context) => {
   context('invalid when version is not a live version', (assert, done) => {
     params.version = '0.1.1'
 
-    request.post('/secrets/combine')
+    request.post('/v1/secrets/verify')
       .send(params)
       .expect(422)
       .expect('Content-Type', /json/)
@@ -86,7 +86,7 @@ describe('POST /secrets/combine', (context) => {
   context('invalid when shards is not an array', (assert, done) => {
     params.shards = 1
 
-    request.post('/secrets/combine')
+    request.post('/v1/secrets/verify')
       .send(params)
       .expect(422)
       .expect('Content-Type', /json/)
@@ -113,15 +113,14 @@ describe('POST /secrets/combine', (context) => {
     group('v1 valid with correct parameters', (assert, done) => {
       params.version = '1.0.0'
 
-      request.post('/secrets/combine')
+      request.post('/v1/secrets/verify')
         .send(params)
         .expect(201)
         .expect('Content-Type', /json/)
         .end((err, response) => {
           assert.notOk(err, 'No error is raised')
           assert.ok(response.body)
-          assert.equal(typeof response.body.secret, 'string')
-          assert.equal(response.body.secret, 'secret')
+          assert.equal(response.body.valid, true)
           done()
         })
     })
@@ -133,7 +132,7 @@ describe('POST /secrets/combine', (context) => {
         '802a274f51b2fead5dd92a240a5f5545e67',
       ]
 
-      request.post('/secrets/combine')
+      request.post('/v1/secrets/verify')
         .send(params)
         .expect(422)
         .expect('Content-Type', /json/)
@@ -166,14 +165,14 @@ describe('POST /secrets/combine', (context) => {
         '805hCYSqYMIpT+4FU+noFhXh9PSH49e4eyzRZLWdQGinEdQqNIDzn4Dw18rVW9a2d5+sf/cbj9EFYIqG1F58NxG9w=='
       ]
 
-      request.post('/secrets/combine')
+      request.post('/v1/secrets/verify')
         .send(params)
         .expect(201)
         .expect('Content-Type', /json/)
         .end((err, response) => {
           assert.notOk(err, 'No error is raised')
           assert.ok(response.body)
-          assert.deepEqual(response.body.secret, '["secret","label"]')
+          assert.deepEqual(response.body.valid, true)
           done()
         })
     })
@@ -187,7 +186,7 @@ describe('POST /secrets/combine', (context) => {
     //     '803fZ7PYfucIUuhpv+WQ3h7xvT1hR+8kMCYmML5JdGZmif51N7k4ryOGlDn37jQDQcjXJq3xP6+TZplmF9LIUXdXg=='
     //   ]
 
-    //   request.post('/secrets/combine')
+    //   request.post('/v1/secrets/verify')
     //     .send(params)
     //     .expect(422)
     //     .expect('Content-Type', /json/)
@@ -212,7 +211,7 @@ describe('POST /secrets/combine', (context) => {
         '803fZ7PYfucIUuhpv+WQ3h7xvT1hR+8kMCYmML5JdGZmif51N7k4ryOGlDn37jQDQcjXJq3xP6+TZplmF9LIUXdXg=='
       ]
 
-      request.post('/secrets/combine')
+      request.post('/v1/secrets/verify')
         .send(params)
         .expect(422)
         .expect('Content-Type', /json/)
