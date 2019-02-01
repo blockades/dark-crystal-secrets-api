@@ -37,7 +37,10 @@ exports.combine = (req, res, next) => {
   } else {
     const params = req.body
 
-    const secret = darkCrystal.combine(params.shards, params.version)
+    const secret = darkCrystal.combine(
+      params.shards,
+      params.version
+    )
 
     return res
       .status(201)
@@ -56,11 +59,14 @@ exports.verify = (req, res, next) => {
   } else {
     const params = req.body
 
-    const secret = darkCrystal.combine(params.shards)
+    const valid = darkCrystal.verify(
+      params.shards,
+      params.version
+    )
 
     return res
-      .status(201)
-      .json({ valid: Boolean(secret) })
+      .status(200)
+      .json({ valid })
   }
 }
 
@@ -82,7 +88,7 @@ exports.validate = (method) => {
 
   const verify = [
     body('version').matches(/^[0-9]+\.[0-9]+\.[0-9]+$/).withMessage("'version' must be semantic version"),
-    body('version').isIn(['1.0.0', '2.0.0']).withMessage("'version' not currently supported"),
+    body('version').isIn(['2.0.0']).withMessage("'version' not currently supported"),
     body('shards').isArray().withMessage("'shards' must be an array"),
     body('shards').custom(validShards).withMessage("one or more of the provided shards are not valid")
   ]

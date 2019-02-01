@@ -12,7 +12,7 @@ describe('POST /v1/secrets/verify', (context) => {
     request = supertest.agent(server)
 
     params = {
-      version: '1.0.0',
+      version: '2.0.0',
       shards: [
         '80104424cf070d06548da4dd40d47f4c156',
         '802a274f51b2fead5dd92a240a5f5545e67',
@@ -110,22 +110,29 @@ describe('POST /v1/secrets/verify', (context) => {
   })
 
   context.group('version 1.0.0', (group) => {
-    group('v1 valid with correct parameters', (assert, done) => {
+    group('v1 invalid with correct parameters as version 1 shards cannot be validated', (assert, done) => {
       params.version = '1.0.0'
 
       request.post('/v1/secrets/verify')
         .send(params)
-        .expect(201)
+        .expect(422)
         .expect('Content-Type', /json/)
         .end((err, response) => {
           assert.notOk(err, 'No error is raised')
           assert.ok(response.body)
-          assert.equal(response.body.valid, true)
+          assert.deepEqual(response.body.errors, [{
+            location: 'body',
+            param: 'version',
+            value: params.version,
+            msg: '\'version\' not currently supported'
+          }])
+
           done()
         })
     })
 
     group('v1 invalid when shards contains an invalid shard', (assert, done) => {
+      params.version = '1.0.0'
       params.shards = [
         '80104424cf070d06548da4dd40d47f4c156', // v1.0.0 shard
         '801vvsr5XtY96OBNjla1Hju5TxywbS+lDmxvQTa023dn7xvL5Ye0ze2CUjq3Tp4CnRaFlyCA9z3earBScS5Ni2a0A==', // v2.0.0 shard
@@ -140,6 +147,11 @@ describe('POST /v1/secrets/verify', (context) => {
           assert.notOk(err, 'No error is raised')
           assert.ok(response.body)
           assert.deepEqual(response.body.errors, [{
+            location: 'body',
+            param: 'version',
+            value: params.version,
+            msg: '\'version\' not currently supported'
+          }, {
             location: 'body',
             param: 'shards',
             value: params.shards,
@@ -167,7 +179,7 @@ describe('POST /v1/secrets/verify', (context) => {
 
       request.post('/v1/secrets/verify')
         .send(params)
-        .expect(201)
+        .expect(200)
         .expect('Content-Type', /json/)
         .end((err, response) => {
           assert.notOk(err, 'No error is raised')
