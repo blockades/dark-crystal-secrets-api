@@ -131,7 +131,7 @@
                   {
                     "location": "body",
                     "param": "secret",
-                    "msg": "'shards' must be an integer "
+                    "msg": "'shards' must be an integer"
                   },
                   {
                     "location": "body",
