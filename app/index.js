@@ -15,6 +15,9 @@ app.use(bodyParser.json())
 const routes = Routes(router, Controllers())
 
 app.use("/", router)
-app.use("/", swaggerUI.serve, swaggerUI.setup(swaggerDocument))
+
+app.use("/", swaggerUI.serve, swaggerUI.setup(swaggerDocument, {
+  customCss: require('../docs/swagger.css.js')()
+}))
 
 exports = module.exports = app
