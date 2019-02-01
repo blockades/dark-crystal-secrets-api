@@ -26,5 +26,6 @@ module.exports = () => {
   .swagger-ui table thead tr td, .swagger-ui table thead tr th { color: white; }
   .swagger-ui .opblock .opblock-summary-path { color: white; }
   .swagger-ui .opblock .opblock-summary-description { color: white; }
+  .swagger-ui .scheme-container .schemes > label { color: white }
   `)
 }
