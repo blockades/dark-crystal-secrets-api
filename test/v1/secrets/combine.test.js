@@ -40,7 +40,7 @@ describe('POST /v1/secrets/combine', (context) => {
           location: 'body',
           param: 'version',
           value: params.version,
-          msg: '\'version\' must be semantic version' 
+          msg: '\'version\' must be semantic version'
         }, {
           location: 'body',
           param: 'version',
@@ -130,7 +130,7 @@ describe('POST /v1/secrets/combine', (context) => {
       params.shards = [
         '80104424cf070d06548da4dd40d47f4c156', // v1.0.0 shard
         '801vvsr5XtY96OBNjla1Hju5TxywbS+lDmxvQTa023dn7xvL5Ye0ze2CUjq3Tp4CnRaFlyCA9z3earBScS5Ni2a0A==', // v2.0.0 shard
-        '802a274f51b2fead5dd92a240a5f5545e67',
+        '802a274f51b2fead5dd92a240a5f5545e67'
       ]
 
       request.post('/v1/secrets/combine')

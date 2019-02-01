@@ -5,7 +5,10 @@
   "main": "app/index.js",
   "scripts": {
     "start": "node server.js",
-    "test": "tape test/**/*.test.js | tap-spec"
+    "test": "npm run test:js && npm run test:lint",
+    "test:js": "tape 'test/**/*.test.js' | tap-spec",
+    "test:lint": "standard",
+    "lint": "standard --fix"
   },
   "repository": {
     "type": "git",

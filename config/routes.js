@@ -4,4 +4,3 @@ module.exports = (router, controllers) => {
   router.post('/v1/secrets/verify', controllers.secrets.validate('verify'), controllers.secrets.verify)
   router.post('/v1/shards/verify', controllers.shards.validate('verify'), controllers.shards.verify)
 }
-

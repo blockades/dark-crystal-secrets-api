@@ -12,7 +12,7 @@ describe('POST /v1/shards/verify', (context) => {
     request = supertest.agent(server)
 
     params = {
-      version: "1.0.0",
+      version: '1.0.0',
       shard: '80104424cf070d06548da4dd40d47f4c156'
     }
   })

@@ -10,7 +10,6 @@ exports.verify = (req, res) => {
     return res
       .status(422)
       .json({ errors: errors.array() })
-
   } else {
     const params = req.body
 
@@ -26,7 +25,7 @@ exports.validate = (method) => {
       body('version').matches(/^[0-9]+\.[0-9]+\.[0-9]+$/).withMessage("'version' must be semantic version"),
       body('version').isIn(['1.0.0', '2.0.0']).withMessage("'version' not currently supported"),
       body('shard').isString().withMessage("'shard' must be a string"),
-      body('shard').custom(isValidShard).withMessage("invalid shard format")
+      body('shard').custom(isValidShard).withMessage('invalid shard format')
     ]
   }[method]
 

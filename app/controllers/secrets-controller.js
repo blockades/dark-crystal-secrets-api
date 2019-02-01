@@ -1,6 +1,6 @@
 // secrets-controller
 
-const { body, oneOf, validationResult } = require('express-validator/check')
+const { body, validationResult } = require('express-validator/check')
 const darkCrystal = require('dark-crystal-secrets')
 
 exports.share = (req, res, next) => {
@@ -10,7 +10,6 @@ exports.share = (req, res, next) => {
     return res
       .status(422)
       .json({ errors: errors.array() })
-
   } else {
     const params = req.body
 
@@ -33,7 +32,6 @@ exports.combine = (req, res, next) => {
     return res
       .status(422)
       .json({ errors: errors.array() })
-
   } else {
     const params = req.body
 
@@ -55,7 +53,6 @@ exports.verify = (req, res, next) => {
     return res
       .status(422)
       .json({ errors: errors.array() })
-
   } else {
     const params = req.body
 
@@ -72,25 +69,25 @@ exports.verify = (req, res, next) => {
 
 exports.validate = (method) => {
   const share = [
-    body('secret').isString().withMessage("'secret' must be a string"),
-    body('quorum').isInt().withMessage("'quorum' must be an integer"),
-    body('quorum').custom(quorumLessThanOne).withMessage("'quorum' must be greater than 1"),
-    body('shards').isInt().withMessage("'shards' must be an integer"),
-    body('shards').custom(greaterThanOrEqualToQuorum).withMessage("'shards' must be greater than or equal to provided 'quorum'"),
+    body('secret').isString().withMessage('\'secret\' must be a string'),
+    body('quorum').isInt().withMessage('\'quorum\' must be an integer'),
+    body('quorum').custom(quorumLessThanOne).withMessage('\'quorum\' must be greater than 1'),
+    body('shards').isInt().withMessage('\'shards\' must be an integer'),
+    body('shards').custom(greaterThanOrEqualToQuorum).withMessage('\'shards\' must be greater than or equal to provided \'quorum\'')
   ]
 
   const combine = [
-    body('version').matches(/^[0-9]+\.[0-9]+\.[0-9]+$/).withMessage("'version' must be semantic version"),
-    body('version').isIn(['1.0.0', '2.0.0']).withMessage("'version' not currently supported"),
-    body('shards').isArray().withMessage("'shards' must be an array"),
-    body('shards').custom(validShards).withMessage("one or more of the provided shards are not valid")
+    body('version').matches(/^[0-9]+\.[0-9]+\.[0-9]+$/).withMessage('\'version\' must be semantic version'),
+    body('version').isIn(['1.0.0', '2.0.0']).withMessage('\'version\' not currently supported'),
+    body('shards').isArray().withMessage('\'shards\' must be an array'),
+    body('shards').custom(validShards).withMessage('one or more of the provided shards are not valid')
   ]
 
   const verify = [
-    body('version').matches(/^[0-9]+\.[0-9]+\.[0-9]+$/).withMessage("'version' must be semantic version"),
-    body('version').isIn(['2.0.0']).withMessage("'version' not currently supported"),
-    body('shards').isArray().withMessage("'shards' must be an array"),
-    body('shards').custom(validShards).withMessage("one or more of the provided shards are not valid")
+    body('version').matches(/^[0-9]+\.[0-9]+\.[0-9]+$/).withMessage('\'version\' must be semantic version'),
+    body('version').isIn(['2.0.0']).withMessage('\'version\' not currently supported'),
+    body('shards').isArray().withMessage('\'shards\' must be an array'),
+    body('shards').custom(validShards).withMessage('one or more of the provided shards are not valid')
   ]
 
   return { share, combine, verify }[method]
