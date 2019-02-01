@@ -8,6 +8,26 @@ Dark Crystal's Secrets API has no database, it does not store any secrets or sha
 
 **This is recommended as a local resource / background process for integrating Dark Crystal's cryptography into your application.**
 
+## Build the Application
+
+_With Docker_:
+
+```
+docker-compose up
+```
+
+_Without Docker_:
+
+```
+npm install
+npm start
+```
+
+
+## Swagger
+
+Swagger Documentaation can be found at `http://localhost:8990/`
+
 ## API
 
 #### POST `/v1/secrets/share`
