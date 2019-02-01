@@ -1,0 +1,459 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Dark Crystal Secrets API is a HTTP JSON API which opens up Dark Crystal's wrapper around an implementation of Shamir's Secret Shares. Dark Crystal transforms secrets into crystal shards that you can send to trusted friends. If you lose the secret, or something happens to you, your friends can combine the shards to recover the crystal and reveal the secret. Dark Crystal's Secrets API has no database, it does not store any secrets or shards, and acts purely as a computational API. This is recommended as a local resource / background process for integrating Dark Crystal's secrets wrapper into your applications.",
+    "version": "1.0.0",
+    "title": "Dark Crystal Secrets API",
+    "contact": {
+      "email": "frontdesk@blockades.org"
+    }
+  },
+  "host": "localhost:8990",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "secrets",
+      "description": "Split a secret into shards, recombine crystal shards to reveal the original secret, or validate an unknown secret"
+    },
+    {
+      "name": "shards",
+      "description": "Verify a Dark Crystal shard before its used in a recombine action"
+    }
+  ],
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/v1/secrets/share": {
+      "post": {
+        "tags": [
+          "secrets"
+        ],
+        "summary": "Splits a secret into shards",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "secret",
+            "schema": {
+              "type": "object",
+              "required": [
+                "secret",
+                "quorum",
+                "shards"
+              ],
+              "properties": {
+                "secret": {
+                  "type": "string",
+                  "description": "Your secret",
+                  "example": "super duper secret"
+                },
+                "quorum": {
+                  "type": "integer",
+                  "description": "The quorum of shards required to reform the secret",
+                  "example": 3
+                },
+                "shards": {
+                  "type": "integer",
+                  "description": "The number of shards to be generated",
+                  "example": 5
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "shards": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "example": {
+                "shards": [
+                  "801/SxOWX7NyQsWhS/cLKvvHZqfpTCndK0drtd0B1Sle6yWScnFSChH+6yxzGHVnNJD",
+                  "802LVP15h5CWfVkZpu3mlkchA4IRpYucw8VE/RTM4A8nFt4PBICwnvFpE6+8LgbCqO6",
+                  "8030H6aoGg/l6CQjSD9yZpHPWNt4/uJa6JkvVYnWtS159XuAduiiiGCPOJqPKrOtHGi",
+                  "804VYW8Oetp4BEiVQc6uZiBxZTjyJK17iPIcy1w0r1wkC3JLGpDzK6mf7BrNGO8SzPn",
+                  "805qKjTf50ULkTWvrxw6lvafPmGbf8S9o653Y8Eu+n566NfEaPjhPTh5xy/+HFp9eH/"
+                ]
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessible entity",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "location": {
+                        "type": "string"
+                      },
+                      "param": {
+                        "type": "string"
+                      },
+                      "msg": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              },
+              "example": {
+                "errors": [
+                  {
+                    "location": "body",
+                    "param": "secret",
+                    "msg": "'secret' must be a string"
+                  },
+                  {
+                    "location": "body",
+                    "param": "quorum",
+                    "msg": "'quorum' must be an integer"
+                  },
+                  {
+                    "location": "body",
+                    "param": "quorum",
+                    "msg": "'quorum' must be greater than 1"
+                  },
+                  {
+                    "location": "body",
+                    "param": "secret",
+                    "msg": "'shards' must be an integer "
+                  },
+                  {
+                    "location": "body",
+                    "param": "secret",
+                    "msg": "'shards' must be greater than or equal to provided 'quorum'"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/secrets/combine": {
+      "post": {
+        "tags": [
+          "secrets"
+        ],
+        "summary": "Recombine shards into the original secret",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "combine",
+            "schema": {
+              "type": "object",
+              "required": [
+                "shards",
+                "version"
+              ],
+              "properties": {
+                "shards": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "example": [
+                    "801/SxOWX7NyQsWhS/cLKvvHZqfpTCndK0drtd0B1Sle6yWScnFSChH+6yxzGHVnNJD",
+                    "802LVP15h5CWfVkZpu3mlkchA4IRpYucw8VE/RTM4A8nFt4PBICwnvFpE6+8LgbCqO6",
+                    "8030H6aoGg/l6CQjSD9yZpHPWNt4/uJa6JkvVYnWtS159XuAduiiiGCPOJqPKrOtHGi"
+                  ]
+                },
+                "version": {
+                  "type": "string",
+                  "description": "A valid semantic version number",
+                  "example": "2.0.0"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "secret": {
+                  "type": "string"
+                }
+              },
+              "example": {
+                "secret": "super duper secret"
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessible entity",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "location": {
+                        "type": "string"
+                      },
+                      "param": {
+                        "type": "string"
+                      },
+                      "msg": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              },
+              "example": {
+                "errors": [
+                  {
+                    "location": "body",
+                    "param": "version",
+                    "msg": "'version' must be a semantic version"
+                  },
+                  {
+                    "location": "body",
+                    "param": "version",
+                    "msg": "'version' not currently supported"
+                  },
+                  {
+                    "location": "body",
+                    "param": "shards",
+                    "msg": "'shards' must be an array"
+                  },
+                  {
+                    "location": "body",
+                    "param": "shards",
+                    "msg": "one or more of the provided shards are not valid"
+                  }
+                ]
+              }
+            }
+          }
+
+        }
+      }
+    },
+    "/v1/secrets/verify": {
+      "post": {
+        "tags": [
+          "secrets"
+        ],
+        "summary": "Verify a secret",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "verify",
+            "schema": {
+              "type": "object",
+              "required": [
+                "shards",
+                "version"
+              ],
+              "properties": {
+                "shards": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "example": [
+                    "801/SxOWX7NyQsWhS/cLKvvHZqfpTCndK0drtd0B1Sle6yWScnFSChH+6yxzGHVnNJD",
+                    "802LVP15h5CWfVkZpu3mlkchA4IRpYucw8VE/RTM4A8nFt4PBICwnvFpE6+8LgbCqO6",
+                    "8030H6aoGg/l6CQjSD9yZpHPWNt4/uJa6JkvVYnWtS159XuAduiiiGCPOJqPKrOtHGi"
+                  ]
+                },
+                "version": {
+                  "type": "string",
+                  "description": "A valid semantic version number",
+                  "example": "2.0.0"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "valid": {
+                  "type": "boolean"
+                }
+              },
+              "example": {
+                "valid": true
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessible entity",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "location": {
+                        "type": "string"
+                      },
+                      "param": {
+                        "type": "string"
+                      },
+                      "msg": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              },
+              "example": {
+                "errors": [
+                  {
+                    "location": "body",
+                    "param": "version",
+                    "msg": "'version' must be a semantic version"
+                  },
+                  {
+                    "location": "body",
+                    "param": "version",
+                    "msg": "'version' not currently supported"
+                  },
+                  {
+                    "location": "body",
+                    "param": "shards",
+                    "msg": "'shards' must be an array"
+                  },
+                  {
+                    "location": "body",
+                    "param": "shards",
+                    "msg": "one or more of the provided shards are not valid"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/shards/verify": {
+      "post": {
+        "tags": [
+          "shards"
+        ],
+        "summary": "Verify a shard",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "combine",
+            "schema": {
+              "type": "object",
+              "required": [
+                "shard",
+                "version"
+              ],
+              "properties": {
+                "shard": {
+                  "type": "string",
+                  "example": "801/SxOWX7NyQsWhS/cLKvvHZqfpTCndK0drtd0B1Sle6yWScnFSChH+6yxzGHVnNJD"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "valid": {
+                  "type": "boolean"
+                }
+              },
+              "example": {
+                "valid": true
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessible entity",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "location": {
+                        "type": "string"
+                      },
+                      "param": {
+                        "type": "string"
+                      },
+                      "msg": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              },
+              "example": {
+                "errors": [
+                  {
+                    "location": "body",
+                    "param": "version",
+                    "msg": "'version' must be a semantic version"
+                  },
+                  {
+                    "location": "body",
+                    "param": "version",
+                    "msg": "'version' not currently supported"
+                  },
+                  {
+                    "location": "body",
+                    "param": "shard",
+                    "msg": "'shard' must be a string"
+                  },
+                  {
+                    "location": "body",
+                    "param": "shards",
+                    "msg": "invalid shard format"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
