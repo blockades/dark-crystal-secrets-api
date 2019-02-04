@@ -1,7 +1,16 @@
+const port = process.env.PORT || 3000
+const hostname = process.env.HOST || 'localhost'
+
+var host
+if (process.env.NODE_ENV === 'development') host = `localhost:${port}`
+else host = `${hostname}:${port}`
+
 const express = require('express')
 const bodyParser = require('body-parser')
+
 const swaggerUI = require('swagger-ui-express')
 const swaggerDocument = require('../docs/swagger.json')
+swaggerDocument.host = host
 
 const Controllers = require('./controllers/')
 const Routes = require('../config/routes')
