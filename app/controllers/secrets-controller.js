@@ -35,14 +35,17 @@ exports.combine = (req, res, next) => {
   } else {
     const params = req.body
 
-    const secret = darkCrystal.combine(
-      params.shards,
+    const secret = darkCrystal.unpack(
+      darkCrystal.combine(
+        params.shards,
+        params.version
+      ),
       params.version
     )
 
     return res
       .status(201)
-      .json({ secret })
+      .json(secret)
   }
 }
 

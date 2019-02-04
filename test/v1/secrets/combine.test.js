@@ -121,7 +121,7 @@ describe('POST /v1/secrets/combine', (context) => {
           assert.notOk(err, 'No error is raised')
           assert.ok(response.body)
           assert.equal(typeof response.body.secret, 'string')
-          assert.equal(response.body.secret, 'secret')
+          assert.deepEqual(response.body, { secret: 'secret' })
           done()
         })
     })
@@ -173,7 +173,7 @@ describe('POST /v1/secrets/combine', (context) => {
         .end((err, response) => {
           assert.notOk(err, 'No error is raised')
           assert.ok(response.body)
-          assert.deepEqual(response.body.secret, '["secret","label"]')
+          assert.deepEqual(response.body, { secret: 'secret', label: 'label' })
           done()
         })
     })
