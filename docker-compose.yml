@@ -9,3 +9,7 @@ services:
     command: npm start
     ports:
       - "8990:3000"
+    environment:
+      - NODE_ENV=production
+      - HOST=api.darkcrystal.pw
+      - PORT=3000

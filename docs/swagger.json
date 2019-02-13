@@ -32,10 +32,6 @@
       }
     }
   ],
-  "schemes": [
-    "http",
-    "https"
-  ],
   "paths": {
     "/v1/secrets/share": {
       "post": {
