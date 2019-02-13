@@ -3,7 +3,7 @@ const hostname = process.env.HOST || 'localhost'
 
 var host
 if (process.env.NODE_ENV === 'development') host = `localhost:${port}`
-else host = `${hostname}:${port}`
+else host = hostname
 
 const express = require('express')
 const bodyParser = require('body-parser')

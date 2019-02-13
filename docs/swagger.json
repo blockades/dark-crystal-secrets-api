@@ -20,10 +20,6 @@
       "description": "Verify a Dark Crystal shard before its used in a recombine action"
     }
   ],
-  "schemes": [
-    "http",
-    "https"
-  ],
   "paths": {
     "/v1/secrets/share": {
       "post": {
