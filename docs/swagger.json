@@ -8,16 +8,28 @@
       "email": "frontdesk@blockades.org"
     }
   },
+  "externalDocs": {
+    "description": "Read the API source code",
+    "url": "https://github.com/blockades/dark-crystal-secrets-api"
+  },
   "host": "localhost:8990",
   "basePath": "/",
   "tags": [
     {
       "name": "secrets",
-      "description": "Split a secret into shards, recombine crystal shards to reveal the original secret, or validate an unknown secret"
+      "description": "Split a secret into shards, recombine crystal shards to reveal the original secret, or validate an unknown secret",
+      "externalDocs": {
+        "description": "View our cryptography",
+        "url": "https://github.com/blockades/dark-crystal-secrets"
+      }
     },
     {
       "name": "shards",
-      "description": "Verify a Dark Crystal shard before its used in a recombine action"
+      "description": "Verify a Dark Crystal shard before its used in a recombine action",
+      "externalDocs": {
+        "description": "Check out our Scuttlebutt application",
+        "url": "https://github.com/blockades/scuttle-dark-crystal"
+      }
     }
   ],
   "schemes": [
